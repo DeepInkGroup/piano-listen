@@ -44,8 +44,6 @@ if ($remotes -notcontains 'origin') {
     throw "The existing origin ($remote) does not match $owner/$RepositoryName. No changes were pushed."
   }
 }
-& git push --set-upstream origin main
-Assert-Success 'Pushing source'
 $hasPages = (& gh api "repos/$owner/$RepositoryName" --jq .has_pages).Trim()
 Assert-Success 'Reading Pages configuration'
 if ($hasPages -eq 'true') {
@@ -54,8 +52,8 @@ if ($hasPages -eq 'true') {
   & gh api --method POST "repos/$owner/$RepositoryName/pages" -f build_type=workflow
 }
 Assert-Success 'Enabling GitHub Pages'
-& gh workflow run pages.yml --ref main
-Assert-Success 'Starting deployment'
+& git push --set-upstream origin main
+Assert-Success 'Pushing source'
 Write-Host "Repository: https://github.com/$owner/$RepositoryName"
-Write-Host "GitHub Pages deployment is running. When the Actions workflow finishes, open https://$owner.github.io/$RepositoryName/"
+Write-Host "The push triggered GitHub Pages. After the Actions workflow succeeds, open https://$owner.github.io/$RepositoryName/"
 Write-Host 'On iPhone: Safari > Share > Add to Home Screen.'
