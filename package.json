@@ -1,0 +1,20 @@
+{
+  "name": "piano-listen",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --configLoader native",
+    "build": "node scripts/prepare-assets.mjs && vite build --configLoader native && node scripts/finalize-build.mjs",
+    "test": "node --test --test-isolation=none tests/*.test.mjs",
+    "test:browser": "node scripts/browser-smoke.mjs",
+    "preview": "vite preview --host 127.0.0.1 --configLoader native"
+  },
+  "dependencies": {
+    "vexflow": "4.2.5"
+  },
+  "devDependencies": {
+    "vite": "6.4.3",
+    "@playwright/test": "1.63.0"
+  }
+}
