@@ -46,12 +46,9 @@ if ($remotes -notcontains 'origin') {
 }
 $hasPages = (& gh api "repos/$owner/$RepositoryName" --jq .has_pages).Trim()
 Assert-Success 'Reading Pages configuration'
-if ($hasPages -eq 'true') {
-  & gh api --method PATCH "repos/$owner/$RepositoryName/pages" -f build_type=workflow
-} else {
-  & gh api --method POST "repos/$owner/$RepositoryName/pages" -f build_type=workflow
+if ($hasPages -ne 'true') {
+  throw "GitHub Pages is not enabled. Open https://github.com/$owner/$RepositoryName/settings/pages, set Build and deployment > Source to GitHub Actions, save, then rerun this script."
 }
-Assert-Success 'Enabling GitHub Pages'
 & git push --set-upstream origin main
 Assert-Success 'Pushing source'
 Write-Host "Repository: https://github.com/$owner/$RepositoryName"
